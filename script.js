@@ -11,7 +11,7 @@ emailjs.init("_Mczvev_oUorf4ERM");
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
     initThemeToggle();
-    initCaptcha();
+    initCustomCaptcha();
     setupDownloadButton();
     setupFormValidation();
     enhanceUserExperience();
@@ -57,32 +57,191 @@ function initThemeToggle() {
 }
 
 /**
- * CAPTCHA Functionality
- * Generates a simple math CAPTCHA to prevent spam
+ * Custom CAPTCHA System
+ * Text-based CAPTCHA with alphanumeric characters on image
  */
-let captchaAnswer;
-
-function initCaptcha() {
-    generateCaptcha();
+const CustomCaptcha = {
+    currentAnswer: null,
+    timeout: 300000, // 5 minutes
+    startTime: null,
     
-    // Add event listener for CAPTCHA input to clear error on type
-    const captchaInput = document.getElementById("captcha");
-    if (captchaInput) {
-        captchaInput.addEventListener('input', function() {
-            document.getElementById("captchaError").style.display = "none";
-        });
-    }
-}
-
-function generateCaptcha() {
-    const num1 = Math.floor(Math.random() * 10);
-    const num2 = Math.floor(Math.random() * 10);
-    captchaAnswer = num1 + num2;
+    init() {
+        this.generateChallenge();
+        this.setupEventListeners();
+        this.startTimer();
+    },
     
-    const captchaQuestion = document.getElementById("captchaQuestion");
-    if (captchaQuestion) {
-        captchaQuestion.innerHTML = `<i class="fas fa-shield-alt"></i> Security Check: What is ${num1} + ${num2}?`;
+    generateChallenge() {
+        this.startTime = Date.now();
+        this.generateTextChallenge();
+        this.updateHint();
+    },
+    
+    generateTextChallenge() {
+        // Generate random alphanumeric string (5-6 characters)
+        const length = Math.floor(Math.random() * 2) + 5; // 5 or 6 characters
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        
+        for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        
+        this.currentAnswer = result;
+        this.displayTextChallenge(result);
+    },
+    
+    displayTextChallenge(text) {
+        const display = document.getElementById('captchaDisplay');
+        
+        // Create canvas for text image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        canvas.width = 200;
+        canvas.height = 80;
+        
+        // Create gradient background
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, '#f0f0f0');
+        gradient.addColorStop(1, '#e0e0e0');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Add noise lines
+        ctx.strokeStyle = '#ccc';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 8; i++) {
+            ctx.beginPath();
+            ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.stroke();
+        }
+        
+        // Add noise dots
+        ctx.fillStyle = '#ddd';
+        for (let i = 0; i < 50; i++) {
+            ctx.beginPath();
+            ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        
+        // Draw text
+        ctx.font = 'bold 32px Arial';
+        ctx.fillStyle = '#333';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Add slight rotation and distortion to each character
+        const charWidth = canvas.width / text.length;
+        for (let i = 0; i < text.length; i++) {
+            ctx.save();
+            
+            // Position and rotate each character slightly
+            const x = charWidth * i + charWidth / 2;
+            const y = canvas.height / 2;
+            const rotation = (Math.random() - 0.5) * 0.3; // -0.15 to 0.15 radians
+            
+            ctx.translate(x, y);
+            ctx.rotate(rotation);
+            
+            // Slight color variation
+            const colorVariation = Math.floor(Math.random() * 50);
+            ctx.fillStyle = `rgb(${51 + colorVariation}, ${51 + colorVariation}, ${51 + colorVariation})`;
+            
+            ctx.fillText(text[i], 0, 0);
+            ctx.restore();
+        }
+        
+        // Convert canvas to image
+        const imageData = canvas.toDataURL();
+        
+        display.innerHTML = `
+            <div class="text-captcha">
+                <img src="${imageData}" alt="CAPTCHA" class="captcha-image">
+                <div class="captcha-instruction">Enter the characters you see above</div>
+            </div>
+        `;
+    },
+    
+    updateHint() {
+        const hint = document.getElementById('captchaHint');
+        if (!hint) return;
+        
+        hint.textContent = 'Enter the alphanumeric characters shown in the image above';
+    },
+    
+    setupEventListeners() {
+        const refreshBtn = document.getElementById('refreshCaptcha');
+        const audioBtn = document.getElementById('audioCaptcha');
+        const input = document.getElementById('captchaInput');
+        
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => this.generateChallenge());
+        }
+        
+        if (audioBtn) {
+            audioBtn.addEventListener('click', () => this.playAudioChallenge());
+        }
+        
+        if (input) {
+            input.addEventListener('input', () => this.clearErrors());
+        }
+    },
+    
+    playAudioChallenge() {
+        if (!('speechSynthesis' in window)) {
+            showStatus('Audio not supported in this browser', 'error');
+            return;
+        }
+        
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = `The characters are: ${this.currentAnswer.split('').join(', ')}`;
+        utterance.rate = 0.6;
+        utterance.pitch = 1;
+        speechSynthesis.speak(utterance);
+    },
+    
+    clearErrors() {
+        const errorEl = document.getElementById('captchaError');
+        const timeoutEl = document.getElementById('captchaTimeout');
+        
+        if (errorEl) errorEl.style.display = 'none';
+        if (timeoutEl) timeoutEl.style.display = 'none';
+    },
+    
+    startTimer() {
+        setTimeout(() => {
+            this.showTimeoutError();
+        }, this.timeout);
+    },
+    
+    showTimeoutError() {
+        const timeoutEl = document.getElementById('captchaTimeout');
+        if (timeoutEl) {
+            timeoutEl.style.display = 'block';
+        }
+        this.generateChallenge();
+    },
+    
+    validateAnswer(userAnswer) {
+        if (!userAnswer || !this.currentAnswer) return false;
+        
+        // Case-insensitive comparison for text CAPTCHA
+        const normalizedUser = userAnswer.toString().trim();
+        const normalizedAnswer = this.currentAnswer.trim();
+        
+        return normalizedUser.toLowerCase() === normalizedAnswer.toLowerCase();
+    },
+    
+    isExpired() {
+        return Date.now() - this.startTime > this.timeout;
     }
+};
+
+function initCustomCaptcha() {
+    CustomCaptcha.init();
 }
 
 /**
@@ -100,7 +259,7 @@ function setupFormValidation() {
         const name = document.getElementById("name").value.trim();
         const email = document.getElementById("email").value.trim();
         const message = document.getElementById("message").value.trim();
-        const captcha = parseInt(document.getElementById("captcha").value, 10);
+        const captcha = document.getElementById("captchaInput").value.trim();
         
         // Form validation
         if (!name || !email || !message) {
@@ -117,14 +276,22 @@ function setupFormValidation() {
         }
         
         // CAPTCHA validation
-        if (isNaN(captcha) || captcha !== captchaAnswer) {
-            document.getElementById("captchaError").style.display = "block";
-            highlightField("captcha");
-            generateCaptcha();
+        if (CustomCaptcha.isExpired()) {
+            showStatus("CAPTCHA expired. Please refresh and try again.", "error");
+            CustomCaptcha.generateChallenge();
             return;
         }
         
+        if (!CustomCaptcha.validateAnswer(captcha)) {
+            document.getElementById("captchaError").style.display = "block";
+            highlightField("captchaInput");
+            CustomCaptcha.generateChallenge();
+            return;
+        }
+        
+        // Clear all errors
         document.getElementById("captchaError").style.display = "none";
+        document.getElementById("captchaTimeout").style.display = "none";
         
         // Disable form during submission
         const submitButton = contactForm.querySelector("button[type='submit']");
@@ -141,7 +308,7 @@ function setupFormValidation() {
         .then(function() {
             showStatus("Message sent successfully! I'll get back to you soon.", "success");
             contactForm.reset();
-            generateCaptcha();
+            CustomCaptcha.generateChallenge();
         })
         .catch(function(error) {
             console.error("EmailJS error:", error);
@@ -159,6 +326,10 @@ function setupFormValidation() {
     formInputs.forEach(input => {
         input.addEventListener('input', function() {
             this.classList.remove('input-error');
+            // Clear CAPTCHA errors on input
+            if (this.id === 'captchaInput') {
+                CustomCaptcha.clearErrors();
+            }
         });
     });
 }
