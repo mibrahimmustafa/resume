@@ -10,7 +10,7 @@ emailjs.init("_Mczvev_oUorf4ERM");
 // Document ready function
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
-    initPagedResumeLayout();
+    initResumeTabs();
     initThemeToggle();
     initCustomCaptcha();
     setupDownloadButton();
@@ -246,15 +246,14 @@ function initCustomCaptcha() {
 }
 
 /**
- * Resume Pagination Layout
- * Groups the existing resume sections into explicit CV pages.
+ * Resume Tab Layout
+ * Groups the existing resume sections into website tabs.
  */
-function initPagedResumeLayout() {
+function initResumeTabs() {
     const body = document.body;
     const mainContent = document.querySelector('.main-content');
-    const header = document.querySelector('.header');
 
-    if (!body || !mainContent || !header || body.classList.contains('cv-paged-layout')) {
+    if (!body || !mainContent || body.classList.contains('resume-tabbed-layout')) {
         return;
     }
 
@@ -273,41 +272,44 @@ function initPagedResumeLayout() {
         return;
     }
 
-    body.classList.add('cv-paged-layout');
+    body.classList.add('resume-tabbed-layout');
 
-    const pageDefinitions = [
+    const tabDefinitions = [
         {
-            number: 1,
+            id: 'profile',
             label: 'Profile',
-            className: 'resume-page--intro',
-            lead: header,
-            content: createPageGrid(
-                'resume-page-grid resume-page-grid--intro',
-                [sections.summary, sections.skills]
+            icon: 'fa-user',
+            content: createSplitColumns(
+                [sections.summary],
+                [sections.skills]
             )
         },
         {
-            number: 2,
-            label: 'Education',
-            className: 'resume-page--education',
-            content: sections.education
-        },
-        {
-            number: 3,
+            id: 'experience',
             label: 'Experience',
-            className: 'resume-page--experience',
+            icon: 'fa-briefcase',
+            className: 'resume-panel--experience',
             content: sections.experience
         },
         {
-            number: 4,
+            id: 'education',
+            label: 'Education',
+            icon: 'fa-graduation-cap',
+            className: 'resume-panel--education',
+            content: sections.education
+        },
+        {
+            id: 'certifications',
             label: 'Certifications',
-            className: 'resume-page--certifications',
+            icon: 'fa-certificate',
+            className: 'resume-panel--certifications',
             content: sections.certifications
         },
         {
-            number: 5,
+            id: 'highlights',
             label: 'Highlights',
-            className: 'resume-page--highlights',
+            icon: 'fa-star',
+            className: 'resume-panel--highlights',
             content: createSplitColumns(
                 [
                     sections.employers,
@@ -320,37 +322,32 @@ function initPagedResumeLayout() {
         }
     ];
 
-    const pagesContainer = document.createElement('div');
-    pagesContainer.className = 'resume-pages';
+    const layout = document.createElement('div');
+    layout.className = 'resume-tabs-shell container';
 
-    pageDefinitions.forEach((pageDefinition, index) => {
-        pagesContainer.appendChild(createResumePage({
-            ...pageDefinition,
-            total: pageDefinitions.length,
-            isLast: index === pageDefinitions.length - 1
-        }));
-    });
+    const intro = document.createElement('div');
+    intro.className = 'resume-tabs-intro';
+    intro.innerHTML = `
+        <p class="resume-tabs-kicker">Resume Sections</p>
+        <h2 class="resume-tabs-title">Browse the CV by tab</h2>
+        <p class="resume-tabs-text">Each tab groups a core part of the resume so the website feels like a structured portfolio instead of one long page.</p>
+    `;
 
-    mainContent.replaceChildren(pagesContainer);
-}
+    const tabs = createResumeTabList(tabDefinitions);
+    const panels = createResumePanelWrap(tabDefinitions);
 
-function createPageGrid(className, sections) {
-    const grid = document.createElement('div');
-    grid.className = className;
-    sections.forEach(section => {
-        if (section) {
-            grid.appendChild(section);
-        }
-    });
-    return grid;
+    layout.append(intro, tabs, panels);
+    mainContent.replaceChildren(layout);
+
+    setupResumeTabs(layout, tabDefinitions);
 }
 
 function createSplitColumns(leftSections, rightSections) {
     const grid = document.createElement('div');
-    grid.className = 'resume-page-grid resume-page-grid--split';
+    grid.className = 'resume-panel-grid resume-panel-grid--split';
 
     const leftColumn = document.createElement('div');
-    leftColumn.className = 'resume-page-column';
+    leftColumn.className = 'resume-panel-column';
     leftSections.forEach(section => {
         if (section) {
             leftColumn.appendChild(section);
@@ -358,7 +355,7 @@ function createSplitColumns(leftSections, rightSections) {
     });
 
     const rightColumn = document.createElement('div');
-    rightColumn.className = 'resume-page-column';
+    rightColumn.className = 'resume-panel-column';
     rightSections.forEach(section => {
         if (section) {
             rightColumn.appendChild(section);
@@ -369,48 +366,154 @@ function createSplitColumns(leftSections, rightSections) {
     return grid;
 }
 
-function createResumePage({ number, total, label, className = '', lead = null, content, isLast = false }) {
-    const page = document.createElement('section');
-    page.className = `resume-page ${className}`.trim();
-    page.dataset.page = number;
+function createResumeTabList(tabDefinitions) {
+    const tabList = document.createElement('div');
+    tabList.className = 'resume-tabs-nav';
+    tabList.setAttribute('role', 'tablist');
+    tabList.setAttribute('aria-label', 'Resume sections');
+
+    tabDefinitions.forEach((tabDefinition, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'resume-tab';
+        button.id = `tab-${tabDefinition.id}`;
+        button.dataset.tab = tabDefinition.id;
+        button.setAttribute('role', 'tab');
+        button.setAttribute('aria-controls', `panel-${tabDefinition.id}`);
+        button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+        button.tabIndex = index === 0 ? 0 : -1;
+        button.innerHTML = `<i class="fas ${tabDefinition.icon}"></i><span>${tabDefinition.label}</span>`;
+        if (index === 0) {
+            button.classList.add('is-active');
+        }
+        tabList.appendChild(button);
+    });
+
+    return tabList;
+}
+
+function createResumePanelWrap(tabDefinitions) {
+    const panels = document.createElement('div');
+    panels.className = 'resume-panels';
+
+    tabDefinitions.forEach((tabDefinition, index) => {
+        panels.appendChild(createResumePanel(tabDefinition, index === 0));
+    });
+
+    return panels;
+}
+
+function createResumePanel({ id, label, className = '', content }, isActive = false) {
+    const panel = document.createElement('section');
+    panel.className = `resume-panel ${className}`.trim();
+    panel.id = `panel-${id}`;
+    panel.dataset.tab = id;
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', `tab-${id}`);
+    panel.hidden = !isActive;
 
     const shell = document.createElement('div');
-    shell.className = 'resume-page-shell';
+    shell.className = 'resume-panel-shell';
 
-    if (lead) {
-        const leadWrapper = document.createElement('div');
-        leadWrapper.className = 'resume-page-lead';
-        leadWrapper.appendChild(lead);
-        shell.appendChild(leadWrapper);
-    }
+    const heading = document.createElement('div');
+    heading.className = 'resume-panel-heading';
+    heading.innerHTML = `
+        <p class="resume-panel-label">${label}</p>
+        <h3 class="resume-panel-title">${label}</h3>
+    `;
+
+    shell.appendChild(heading);
 
     const contentWrapper = document.createElement('div');
-    contentWrapper.className = 'resume-page-content';
+    contentWrapper.className = 'resume-panel-content';
     if (content) {
         contentWrapper.appendChild(content);
     }
-    shell.appendChild(contentWrapper);
 
-    const meta = document.createElement('div');
-    meta.className = 'resume-page-meta';
-    if (isLast) {
-        meta.classList.add('resume-page-meta--last');
+    shell.appendChild(contentWrapper);
+    panel.appendChild(shell);
+
+    if (isActive) {
+        panel.classList.add('is-active');
     }
 
-    const name = document.createElement('span');
-    name.textContent = 'Mohamed Abdelrahman';
+    return panel;
+}
 
-    const pageLabel = document.createElement('span');
-    pageLabel.textContent = label;
+function setupResumeTabs(layout, tabDefinitions) {
+    const tabs = Array.from(layout.querySelectorAll('.resume-tab'));
+    const panels = Array.from(layout.querySelectorAll('.resume-panel'));
+    const validTabIds = new Set(tabDefinitions.map(({ id }) => id));
 
-    const pageCount = document.createElement('span');
-    pageCount.textContent = `Page ${number} of ${total}`;
+    const activateTab = (tabId, updateHash = true) => {
+        if (!validTabIds.has(tabId)) {
+            return;
+        }
 
-    meta.append(name, pageLabel, pageCount);
-    shell.appendChild(meta);
-    page.appendChild(shell);
+        tabs.forEach(tab => {
+            const isActive = tab.dataset.tab === tabId;
+            tab.classList.toggle('is-active', isActive);
+            tab.setAttribute('aria-selected', String(isActive));
+            tab.tabIndex = isActive ? 0 : -1;
+        });
 
-    return page;
+        panels.forEach(panel => {
+            const isActive = panel.dataset.tab === tabId;
+            panel.hidden = !isActive;
+            panel.classList.toggle('is-active', isActive);
+
+            if (isActive) {
+                panel.querySelectorAll('.section').forEach(section => {
+                    section.classList.add('section-visible');
+                });
+            }
+        });
+
+        if (updateHash && window.location.hash !== `#${tabId}`) {
+            history.replaceState(null, '', `#${tabId}`);
+        }
+    };
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateTab(tab.dataset.tab));
+        tab.addEventListener('keydown', event => {
+            const currentIndex = tabs.indexOf(tab);
+            let nextIndex = currentIndex;
+
+            if (event.key === 'ArrowRight') {
+                nextIndex = (currentIndex + 1) % tabs.length;
+            } else if (event.key === 'ArrowLeft') {
+                nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+            } else if (event.key === 'Home') {
+                nextIndex = 0;
+            } else if (event.key === 'End') {
+                nextIndex = tabs.length - 1;
+            } else {
+                return;
+            }
+
+            event.preventDefault();
+            tabs[nextIndex].focus();
+            activateTab(tabs[nextIndex].dataset.tab);
+        });
+
+        if (index === 0) {
+            tab.classList.add('is-active');
+        }
+    });
+
+    const initialTabId = validTabIds.has(window.location.hash.slice(1))
+        ? window.location.hash.slice(1)
+        : tabDefinitions[0].id;
+
+    activateTab(initialTabId, false);
+
+    window.addEventListener('hashchange', () => {
+        const requestedTabId = window.location.hash.slice(1);
+        if (validTabIds.has(requestedTabId)) {
+            activateTab(requestedTabId, false);
+        }
+    });
 }
 
 /**
