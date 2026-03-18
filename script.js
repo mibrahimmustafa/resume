@@ -10,6 +10,7 @@ emailjs.init("_Mczvev_oUorf4ERM");
 // Document ready function
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
+    initPagedResumeLayout();
     initThemeToggle();
     initCustomCaptcha();
     setupDownloadButton();
@@ -245,6 +246,174 @@ function initCustomCaptcha() {
 }
 
 /**
+ * Resume Pagination Layout
+ * Groups the existing resume sections into explicit CV pages.
+ */
+function initPagedResumeLayout() {
+    const body = document.body;
+    const mainContent = document.querySelector('.main-content');
+    const header = document.querySelector('.header');
+
+    if (!body || !mainContent || !header || body.classList.contains('cv-paged-layout')) {
+        return;
+    }
+
+    const sections = {
+        summary: document.getElementById('summary'),
+        education: document.getElementById('education'),
+        skills: document.getElementById('skills'),
+        experience: document.getElementById('experience'),
+        certifications: document.getElementById('certifications'),
+        employers: document.getElementById('employers'),
+        projects: document.getElementById('projects'),
+        achievements: document.getElementById('achievements')
+    };
+
+    if (Object.values(sections).some(section => !section)) {
+        return;
+    }
+
+    body.classList.add('cv-paged-layout');
+
+    const pageDefinitions = [
+        {
+            number: 1,
+            label: 'Profile',
+            className: 'resume-page--intro',
+            lead: header,
+            content: createPageGrid(
+                'resume-page-grid resume-page-grid--intro',
+                [sections.summary, sections.skills]
+            )
+        },
+        {
+            number: 2,
+            label: 'Education',
+            className: 'resume-page--education',
+            content: sections.education
+        },
+        {
+            number: 3,
+            label: 'Experience',
+            className: 'resume-page--experience',
+            content: sections.experience
+        },
+        {
+            number: 4,
+            label: 'Certifications',
+            className: 'resume-page--certifications',
+            content: sections.certifications
+        },
+        {
+            number: 5,
+            label: 'Highlights',
+            className: 'resume-page--highlights',
+            content: createSplitColumns(
+                [
+                    sections.employers,
+                    sections.projects
+                ],
+                [
+                    sections.achievements
+                ]
+            )
+        }
+    ];
+
+    const pagesContainer = document.createElement('div');
+    pagesContainer.className = 'resume-pages';
+
+    pageDefinitions.forEach((pageDefinition, index) => {
+        pagesContainer.appendChild(createResumePage({
+            ...pageDefinition,
+            total: pageDefinitions.length,
+            isLast: index === pageDefinitions.length - 1
+        }));
+    });
+
+    mainContent.replaceChildren(pagesContainer);
+}
+
+function createPageGrid(className, sections) {
+    const grid = document.createElement('div');
+    grid.className = className;
+    sections.forEach(section => {
+        if (section) {
+            grid.appendChild(section);
+        }
+    });
+    return grid;
+}
+
+function createSplitColumns(leftSections, rightSections) {
+    const grid = document.createElement('div');
+    grid.className = 'resume-page-grid resume-page-grid--split';
+
+    const leftColumn = document.createElement('div');
+    leftColumn.className = 'resume-page-column';
+    leftSections.forEach(section => {
+        if (section) {
+            leftColumn.appendChild(section);
+        }
+    });
+
+    const rightColumn = document.createElement('div');
+    rightColumn.className = 'resume-page-column';
+    rightSections.forEach(section => {
+        if (section) {
+            rightColumn.appendChild(section);
+        }
+    });
+
+    grid.append(leftColumn, rightColumn);
+    return grid;
+}
+
+function createResumePage({ number, total, label, className = '', lead = null, content, isLast = false }) {
+    const page = document.createElement('section');
+    page.className = `resume-page ${className}`.trim();
+    page.dataset.page = number;
+
+    const shell = document.createElement('div');
+    shell.className = 'resume-page-shell';
+
+    if (lead) {
+        const leadWrapper = document.createElement('div');
+        leadWrapper.className = 'resume-page-lead';
+        leadWrapper.appendChild(lead);
+        shell.appendChild(leadWrapper);
+    }
+
+    const contentWrapper = document.createElement('div');
+    contentWrapper.className = 'resume-page-content';
+    if (content) {
+        contentWrapper.appendChild(content);
+    }
+    shell.appendChild(contentWrapper);
+
+    const meta = document.createElement('div');
+    meta.className = 'resume-page-meta';
+    if (isLast) {
+        meta.classList.add('resume-page-meta--last');
+    }
+
+    const name = document.createElement('span');
+    name.textContent = 'Mohamed Abdelrahman';
+
+    const pageLabel = document.createElement('span');
+    pageLabel.textContent = label;
+
+    const pageCount = document.createElement('span');
+    pageCount.textContent = `Page ${number} of ${total}`;
+
+    meta.append(name, pageLabel, pageCount);
+    shell.appendChild(meta);
+    page.appendChild(shell);
+
+    return page;
+}
+
+/**
  * Contact Form Functionality
  * Handles form validation and submission
  */
@@ -393,38 +562,24 @@ function showStatus(message, type) {
 function setupDownloadButton() {
     const downloadButton = document.getElementById("download-btn");
     if (!downloadButton) return;
-    
-    // Check sessionStorage to disable the button if the file was already downloaded
-    if (sessionStorage.getItem("fileDownloaded")) {
-        downloadButton.innerHTML = '<i class="fas fa-check"></i> CV Downloaded';
-        downloadButton.classList.add('downloaded');
-        downloadButton.title = "You've already downloaded the CV";
-        downloadButton.disabled = true;
-    }
-    
+
     downloadButton.addEventListener("click", function() {
         // Visual feedback before download
         const originalText = this.innerHTML;
         this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
-        
+
         // Create download link
         const fileLink = document.createElement("a");
         fileLink.href = "MohamedAbdelrahman.pdf";
         fileLink.download = "MohamedAbdelrahman.pdf";
-        
+
         // Start download
         fileLink.click();
-        
-        // Mark as downloaded in sessionStorage
-        sessionStorage.setItem("fileDownloaded", "true");
-        
-        // Disable the button with delay for better UX
+
+        // Restore the button state after the file request starts
         setTimeout(() => {
-            this.innerHTML = '<i class="fas fa-check"></i> CV Downloaded';
-            this.classList.add('downloaded');
-            this.title = "You've already downloaded the CV";
-            this.disabled = true;
-        }, 1000);
+            this.innerHTML = originalText;
+        }, 1200);
     });
 }
 
