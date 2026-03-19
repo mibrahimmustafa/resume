@@ -936,3 +936,58 @@ function initTypewriterEffect() {
     setTimeout(type, 1000);
 }
 
+
+
+// ===== CHATBOT FUNCTIONALITY =====
+function initChatbot() {
+    const toggleBtn = document.getElementById('chatbot-toggle');
+    const closeBtn = document.getElementById('chatbot-close');
+    const chatWindow = document.getElementById('chatbot-window');
+    const authForm = document.getElementById('chatbotAuthForm');
+    const authSect = document.getElementById('chatbot-auth');
+    const iframeSect = document.getElementById('chatbot-iframe-container');
+    
+    if(!toggleBtn || !chatWindow) return;
+
+    // Toggle Chat window
+    function toggleChat() {
+        chatWindow.classList.toggle('active');
+    }
+
+    toggleBtn.addEventListener('click', toggleChat);
+    closeBtn.addEventListener('click', () => chatWindow.classList.remove('active'));
+
+    // Handle Auth Form Submission
+    authForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('chatName').value.trim();
+        const email = document.getElementById('chatEmail').value.trim();
+        const phone = document.getElementById('chatPhone').value.trim();
+        
+        // Build webhook URL with parameters
+        const baseUrl = "https://c1vps004.4topapps.com/webhook/6924c320-eeae-4b5e-9b05-4f8b4c58ed77/chat";
+        const urlParams = new URLSearchParams({
+            fullname: name,
+            email: email,
+            phone: phone
+        });
+        
+        const finalUrl = `${baseUrl}?${urlParams.toString()}`;
+        
+        // Update UI
+        authSect.classList.add('hidden');
+        iframeSect.classList.remove('hidden');
+        
+        // Inject iframe
+        iframeSect.innerHTML = `<iframe src="${finalUrl}" allow="microphone; camera"></iframe>`;
+    });
+}
+
+// Attach to DOMContentLoaded safely
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initChatbot);
+} else {
+    initChatbot();
+}
+
