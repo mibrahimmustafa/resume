@@ -672,25 +672,88 @@ function showStatus(message, type) {
  */
 function setupDownloadButton() {
     const downloadButton = document.getElementById("download-btn");
-    if (!downloadButton) return;
+    const modal = document.getElementById("downloadCvModal");
+    const closeBtn = document.getElementById("closeCvModal");
+    const downloadForm = document.getElementById("downloadCvForm");
+    const statusMsg = document.getElementById("cvDownloadStatus");
+    
+    if (!downloadButton || !modal) return;
 
-    downloadButton.addEventListener("click", function() {
-        // Visual feedback before download
-        const originalText = this.innerHTML;
-        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
+    downloadButton.addEventListener("click", function(e) {
+        e.preventDefault();
+        modal.classList.add("active");
+        statusMsg.style.display = "none";
+    });
 
-        // Create download link
-        const fileLink = document.createElement("a");
-        fileLink.href = "MohamedAbdelrahman.pdf";
-        fileLink.download = "MohamedAbdelrahman.pdf";
+    closeBtn.addEventListener("click", function() {
+        modal.classList.remove("active");
+    });
 
-        // Start download
-        fileLink.click();
+    window.addEventListener("click", function(e) {
+        if (e.target == modal) {
+            modal.classList.remove("active");
+        }
+    });
 
-        // Restore the button state after the file request starts
-        setTimeout(() => {
-            this.innerHTML = originalText;
-        }, 1200);
+    downloadForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const btn = document.getElementById("submitCvDownload");
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        btn.disabled = true;
+        
+        const name = document.getElementById("cvName").value.trim();
+        const email = document.getElementById("cvEmail").value.trim();
+        const phone = document.getElementById("cvPhone").value.trim();
+
+        fetch("https://c1vps004.4topapps.com/webhook/downloadCV", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fullname: name,
+                email: email,
+                phone: phone,
+                source: window.location.hostname || "mohamedabdelrahman",
+                timestamp: new Date().toISOString()
+            })
+        })
+        .then(() => {
+            statusMsg.innerText = "Success! Your download is starting...";
+            statusMsg.style.color = "#2ed573";
+            statusMsg.style.display = "block";
+            
+            const fileLink = document.createElement("a");
+            fileLink.href = "MohamedAbdelrahman.pdf";
+            fileLink.download = "MohamedAbdelrahman.pdf";
+            fileLink.click();
+            
+            setTimeout(() => {
+                modal.classList.remove("active");
+                downloadForm.reset();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        })
+        .catch(err => {
+            console.error("Webhook error:", err);
+            statusMsg.innerText = "Error connecting, but starting download...";
+            statusMsg.style.color = "#ff6b6b";
+            statusMsg.style.display = "block";
+            
+            const fileLink = document.createElement("a");
+            fileLink.href = "MohamedAbdelrahman.pdf";
+            fileLink.download = "MohamedAbdelrahman.pdf";
+            fileLink.click();
+            
+            setTimeout(() => {
+                modal.classList.remove("active");
+                downloadForm.reset();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 3000);
+        });
     });
 }
 
@@ -983,12 +1046,38 @@ function initChatbot() {
         
         const finalUrl = `${baseUrl}?${urlParams.toString()}`;
         
-        // Update UI
-        authSect.classList.add('hidden');
-        iframeSect.classList.remove('hidden');
+        // Update UI: Hide our custom chatbot container completely
+        document.getElementById('chatbot-container').style.display = 'none';
         
-        // Inject iframe
-        iframeSect.innerHTML = `<iframe src="${finalUrl}" allow="microphone; camera"></iframe>`;
+        // Inject N8N Native Chat Widget
+        const link = document.createElement('link');
+        link.href = 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css';
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
+        
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.innerHTML = `
+            import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+            createChat({
+                webhookUrl: '${finalUrl}',
+                mode: 'window',
+                initialMessages: [
+                    'Hi! I have entered my details. My name is ${name}. My email is ${email}. My phone is ${phone}. I would like to start chatting!'
+                ],
+                metadata: {
+                    fullname: '${name}',
+                    email: '${email}',
+                    phone: '${phone}'
+                }
+            });
+            // Automatically click the N8N toggle to keep it seamless
+            setTimeout(() => {
+                const n8nToggle = document.querySelector('.chat-toggle-button, [aria-label="Open chat"]');
+                if(n8nToggle) n8nToggle.click();
+            }, 1000);
+        `;
+        document.body.appendChild(script);
     });
 }
 
