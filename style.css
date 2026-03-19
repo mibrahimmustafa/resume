@@ -409,6 +409,8 @@ button {
 .profile-links {
   display: flex;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
   justify-content: center;
   gap: var(--space-md);
   margin-top: var(--space-md);
@@ -798,6 +800,61 @@ button {
   top: 0;
   left: 0;
   right: 0;
+
+/* ===== SCROLL PROGRESS ===== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-light), var(--accent-color));
+  z-index: 9999;
+  transition: width 0.1s;
+  box-shadow: 0 1px 10px rgba(6, 182, 212, 0.5);
+}
+
+/* ===== CUSTOM CURSOR ===== */
+@media (pointer: fine) {
+  body {
+    cursor: none; /* Hide default cursor */
+  }
+  
+  .cursor-dot, .cursor-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 10000;
+    pointer-events: none;
+    transition: width 0.2s, height 0.2s;
+  }
+  
+  .cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary-color);
+  }
+  
+  .cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--accent-color);
+    transition: width 0.2s, height 0.2s, transform 0.1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    background: transparent;
+  }
+  
+  a:hover ~ .cursor-outline, 
+  button:hover ~ .cursor-outline,
+  .employer-card:hover ~ .cursor-outline,
+  .certification-card:hover ~ .cursor-outline {
+    width: 60px;
+    height: 60px;
+    background: rgba(37, 99, 235, 0.1);
+    border-color: var(--primary-color);
+  }
+}
   height: 3px;
   background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
   transform: scaleX(0);
@@ -1699,3 +1756,223 @@ body.resume-tabbed-layout {
 .slide-up {
   animation: slideUp 0.5s ease forwards;
 }
+
+
+/* ===== NEW EFFECTS ===== */
+#typed-job-title {
+  background: linear-gradient(90deg, #fff, var(--accent-color));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  min-height: 1.5em; /* to reserve space for typed text */
+}
+
+/* Typed animation cursor */
+.typed-cursor {
+  opacity: 1;
+  animation: blink 0.7s infinite;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+@keyframes blink { 
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Floating header shapes */
+.header-floating-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.shape {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border-radius: 50%;
+  animation: float-shape 15s infinite ease-in-out alternate;
+}
+
+.shape-1 { left: 10%; top: 20%; width: 150px; height: 150px; animation-delay: 0s; }
+.shape-2 { right: 15%; top: 40%; width: 200px; height: 200px; animation-delay: -5s; border-radius: 10%; transform: rotate(45deg); }
+.shape-3 { left: 40%; bottom: -50px; width: 300px; height: 300px; animation-delay: -10s; }
+
+@keyframes float-shape {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  50% { transform: translateY(-30px) rotate(90deg) scale(1.1); }
+  100% { transform: translateY(30px) rotate(180deg) scale(0.9); }
+}
+
+/* ===== SCROLL PROGRESS ===== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-light), var(--accent-color));
+  z-index: 9999;
+  transition: width 0.1s;
+  box-shadow: 0 1px 10px rgba(6, 182, 212, 0.5);
+}
+
+/* ===== CUSTOM CURSOR ===== */
+@media (pointer: fine) {
+  body {
+    cursor: auto;
+  }
+  
+  .cursor-dot, .cursor-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 10000;
+    pointer-events: none;
+    transition: width 0.2s, height 0.2s;
+  }
+  
+  .cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary-color);
+  }
+  
+  .cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--accent-color);
+    transition: width 0.2s, height 0.2s, transform 0.1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    background: transparent;
+  }
+  
+  a:hover ~ .cursor-outline, 
+  button:hover ~ .cursor-outline,
+  .employer-card:hover ~ .cursor-outline,
+  .certification-card:hover ~ .cursor-outline {
+    width: 60px;
+    height: 60px;
+    background: rgba(37, 99, 235, 0.1);
+    border-color: var(--primary-color);
+  }
+}
+
+
+
+/* ===== RESUME TABS INTRO STYLING ===== */
+.resume-tabs-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--space-xl) auto;
+  padding: var(--space-xl);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-normal);
+}
+
+[data-theme="dark"] .resume-tabs-intro {
+  background: rgba(33, 37, 41, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.resume-tabs-intro:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+}
+
+.resume-tabs-kicker {
+  display: inline-block;
+  font-size: var(--font-sm);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-color);
+  margin-bottom: var(--space-sm);
+  background: rgba(6, 182, 212, 0.1);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.resume-tabs-title {
+  font-size: var(--font-xxl);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--space-md);
+  color: transparent;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.resume-tabs-text {
+  font-size: var(--font-md);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Also style the tab buttons for better modern look */
+.resume-tabs-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.resume-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 30px;
+  color: var(--text-secondary);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  backdrop-filter: blur(5px);
+}
+
+[data-theme="dark"] .resume-tab {
+  background: rgba(33, 37, 41, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
+.resume-tab:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .resume-tab:hover {
+  background: rgba(33, 37, 41, 0.9);
+}
+
+.resume-tab.is-active {
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  color: var(--white);
+  border: none;
+  box-shadow: var(--shadow-md);
+}
+
+.resume-tab i {
+  font-size: var(--font-md);
+}
+

@@ -69,14 +69,24 @@
         </script>
     </head>
     <body>
+        <div class="cursor-dot"></div>
+        <div class="cursor-outline"></div>
+        <div class="scroll-progress" id="scroll-progress"></div>
         <div class="page-wrapper">
             <header class="header">
+                <div class="header-floating-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                </div>
                 <div class="header-content">
                     <div class="profile-container">
                         <img src="pic.webp" alt="Mohamed Abdelrahman" class="profile-pic">
                         <div class="profile-info">
                             <h1 class="name">Mohamed Abdelrahman</h1>
-                            <h2 class="job-title">Technical team leader | Sr. System Architect | Sr. Multi-Cloud Engineer | Sr. Platform Engineer | CRM Administrator | DevOps Engineer | Sr. System Specialist</h2>
+                            <div class="typed-job-container">
+                                <h2 class="job-title" id="typed-job-title">Technical team leader</h2>
+                            </div>
                         </div>
                     </div>
                     <div class="contact-container">

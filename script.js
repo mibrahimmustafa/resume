@@ -328,9 +328,9 @@ function initResumeTabs() {
     const intro = document.createElement('div');
     intro.className = 'resume-tabs-intro';
     intro.innerHTML = `
-        <p class="resume-tabs-kicker">Resume Sections</p>
-        <h2 class="resume-tabs-title">Browse the CV by tab</h2>
-        <p class="resume-tabs-text">Each tab groups a core part of the resume so the website feels like a structured portfolio instead of one long page.</p>
+        <p class="resume-tabs-kicker">Discover More</p>
+        <h2 class="resume-tabs-title">Navigate My Professional Profile</h2>
+        <p class="resume-tabs-text">I've structured my resume into focused sections so you can easily explore my background as an interactive portfolio.</p>
     `;
 
     const tabs = createResumeTabList(tabDefinitions);
@@ -837,3 +837,102 @@ function initTooltips() {
         });
     });
 }
+
+
+// ===== NEW UI/UX EFFECTS =====
+document.addEventListener('DOMContentLoaded', function() {
+    initScrollProgress();
+    initCustomCursor();
+    initTypewriterEffect();
+});
+
+function initScrollProgress() {
+    window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        const progressBar = document.getElementById('scroll-progress');
+        if(progressBar) {
+            progressBar.style.width = scrolled + '%';
+        }
+    });
+}
+
+function initCustomCursor() {
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+    
+    if (!cursorDot || !cursorOutline) return;
+
+    window.addEventListener('mousemove', function(e) {
+        const posX = e.clientX;
+        const posY = e.clientY;
+
+        cursorDot.style.left = posX + 'px';
+        cursorDot.style.top = posY + 'px';
+
+        // Add a slight delay for outline
+        cursorOutline.animate({
+            left: posX + 'px',
+            top: posY + 'px'
+        }, { duration: 500, fill: 'forwards' });
+    });
+}
+
+function initTypewriterEffect() {
+    const titleElement = document.getElementById('typed-job-title');
+    if (!titleElement) return;
+    
+    const titles = [
+        'Technical Team Leader',
+        'Sr. System Architect',
+        'Sr. Multi-Cloud Engineer',
+        'Sr. Platform Engineer',
+        'CRM Administrator',
+        'DevOps Engineer',
+        'Sr. System Specialist'
+    ];
+    
+    let titleIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingDelay = 100;
+    let erasingDelay = 50;
+    let newWordDelay = 2000;
+    
+    titleElement.innerHTML = '<span class="typed-text"></span><span class="typed-cursor">|</span>';
+    const textSpan = titleElement.querySelector('.typed-text');
+    
+    function type() {
+        if(!textSpan) return;
+        const currentTitle = titles[titleIndex];
+        
+        if (isDeleting) {
+            textSpan.textContent = currentTitle.substring(0, charIndex - 1);
+            charIndex--;
+            typingDelay = erasingDelay;
+        } else {
+            textSpan.textContent = currentTitle.substring(0, charIndex + 1);
+            charIndex++;
+            typingDelay = 100;
+        }
+        
+        if (!isDeleting && charIndex === currentTitle.length) {
+            isDeleting = true;
+            typingDelay = newWordDelay;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            titleIndex++;
+            if (titleIndex >= titles.length) {
+                titleIndex = 0;
+            }
+            typingDelay = 500;
+        }
+        
+        setTimeout(type, typingDelay);
+    }
+    
+    // Start typing effect
+    setTimeout(type, 1000);
+}
+
