@@ -2271,3 +2271,122 @@ body.resume-tabbed-layout {
   margin-bottom: 20px;
 }
 
+\n
+/* ===== ENHANCED MODERN ANIMATIONS ===== */
+
+/* timeline items hover effect */
+.timeline-item {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.timeline-item:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-left-color: var(--primary-color);
+}
+
+/* Skill items glowing border */
+.skill-item {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.skill-item::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    transform: rotate(45deg);
+    pointer-events: none;
+}
+.skill-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+    border-color: var(--primary-color);
+}
+.skill-item:hover::before {
+    opacity: 1;
+    animation: rotateGlow 3s linear infinite;
+}
+
+@keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Certification & Project Card Hover */
+.certification-card, .employer-card, .achievement-card {
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.certification-card:hover, .employer-card:hover, .achievement-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Profile Image Hover Pulse */
+.profile-pic {
+    transition: all 0.5s ease;
+}
+.profile-pic:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.4);
+}
+
+/* Floating Animation for Header Icons */
+.contact-item i {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+.contact-item:hover i {
+    transform: scale(1.2) translateY(-2px);
+    color: var(--accent-color);
+}
+
+/* Button pulsing scale */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.6s, opacity 0.6s;
+}
+.btn-primary:active::after {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    transition: 0s;
+}
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+}
+
+/* Section Fade Ins executed by JS */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUpCustom 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes fadeInUpCustom {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
