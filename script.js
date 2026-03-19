@@ -5,7 +5,7 @@
  */
 
 // Initialize EmailJS
-emailjs.init("_Mczvev_oUorf4ERM");
+
 
 // Document ready function
 document.addEventListener('DOMContentLoaded', function() {
@@ -571,19 +571,27 @@ function setupFormValidation() {
         submitButton.disabled = true;
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         
-        // Send email using EmailJS
-        emailjs.send("service_92gbfx2", "template_1qu0jow", {
-            to_name: name,
-            from_name: email,
-            message: message
+        // Send directly to n8n Webhook ONLY
+        fetch("https://c1vps004.4topapps.com/webhook/CV-Website-Contactus", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                message: message,
+                source: window.location.hostname || "mohamedabdelrahman",
+                timestamp: new Date().toISOString()
+            })
         })
-        .then(function() {
+        .then(response => {
             showStatus("Message sent successfully! I'll get back to you soon.", "success");
             contactForm.reset();
             CustomCaptcha.generateChallenge();
         })
         .catch(function(error) {
-            console.error("EmailJS error:", error);
+            console.error("Webhook error:", error);
             showStatus("Failed to send message. Please try again later.", "error");
         })
         .finally(function() {
