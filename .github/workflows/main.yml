@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Upload files via SFTP
+      - name: Upload files to .com via SFTP
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.FTP_SERVER }}
@@ -21,7 +21,16 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD  }}
           port: ${{ secrets.FTP_PORT }}
           source: "."
-          target: 
-           - "/home/u627514535/domains/mohamedabdelrahman.com/public_html"
-           - "/home/u627514535/domains/mohamedabdelrahman.net/public_html"
+          target: "/home/u627514535/domains/mohamedabdelrahman.com/public_html"
+          rm: false
+
+      - name: Upload files to .net via SFTP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME  }}
+          password: ${{ secrets.FTP_PASSWORD  }}
+          port: ${{ secrets.FTP_PORT }}
+          source: "."
+          target: "/home/u627514535/domains/mohamedabdelrahman.net/public_html"
           rm: false
