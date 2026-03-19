@@ -21,5 +21,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD  }}
           port: ${{ secrets.FTP_PORT }}
           source: "."
-          target: "/home/u627514535/domains/mohamedabdelrahman.com/public_html"
+          target: 
+           - "/home/u627514535/domains/mohamedabdelrahman.com/public_html"
+           - "/home/u627514535/domains/mohamedabdelrahman.net/public_html"
           rm: false
