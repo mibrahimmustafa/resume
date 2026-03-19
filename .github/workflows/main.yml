@@ -24,7 +24,7 @@ jobs:
           target: "/home/u627514535/domains/mohamedabdelrahman.com/public_html"
           rm: false
 
-      - name: Upload files to .net via SFTP mohamedabdelrahman.net
+      - name: Upload files to .net via SFTP mohamedabdelrahman.net 
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.FTP_SERVER }}
