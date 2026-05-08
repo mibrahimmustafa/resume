@@ -325,18 +325,10 @@ function initResumeTabs() {
     const layout = document.createElement('div');
     layout.className = 'resume-tabs-shell container';
 
-    const intro = document.createElement('div');
-    intro.className = 'resume-tabs-intro';
-    intro.innerHTML = `
-        <p class="resume-tabs-kicker">Discover More</p>
-        <h2 class="resume-tabs-title">Navigate My Professional Profile</h2>
-        <p class="resume-tabs-text">I've structured my resume into focused sections so you can easily explore my background as an interactive portfolio.</p>
-    `;
-
     const tabs = createResumeTabList(tabDefinitions);
     const panels = createResumePanelWrap(tabDefinitions);
 
-    layout.append(intro, tabs, panels);
+    layout.append(tabs, panels);
     mainContent.replaceChildren(layout);
 
     setupResumeTabs(layout, tabDefinitions);
