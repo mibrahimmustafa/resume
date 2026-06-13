@@ -564,7 +564,7 @@ function setupFormValidation() {
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         
         // Send directly to n8n Webhook ONLY
-        fetch("https://c1vps004.4topapps.com/webhook/CV-Website-Contactus", {
+        fetch("https://n8n-m8jl.srv1557563.hstgr.cloud/webhook/CV-Website-ContactUS", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -698,7 +698,7 @@ function setupDownloadButton() {
         const email = document.getElementById("cvEmail").value.trim();
         const phone = document.getElementById("cvPhone").value.trim();
 
-        fetch("https://c1vps004.4topapps.com/webhook/downloadCV", {
+        fetch("https://n8n-m8jl.srv1557563.hstgr.cloud/webhook/CV-Website-ContactUS", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -1029,7 +1029,7 @@ function initChatbot() {
         const phone = document.getElementById('chatPhone').value.trim();
         
         // Build webhook URL with parameters
-        const baseUrl = "https://c1vps004.4topapps.com/webhook/6924c320-eeae-4b5e-9b05-4f8b4c58ed77/chat";
+        const baseUrl = "https://n8n-m8jl.srv1557563.hstgr.cloud/webhook/CV-Website-Chatbot";
         const urlParams = new URLSearchParams({
             fullname: name,
             email: email,
