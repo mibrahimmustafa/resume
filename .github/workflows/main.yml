@@ -26,7 +26,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME  }}
           password: ${{ secrets.FTP_PASSWORD  }}
           port: ${{ secrets.FTP_PORT }}
-          source: ".,!.git,!.github"
+          source: "index.html,style.css,script.js,pic.png,pic.webp,MohamedAbdelrahman.pdf,hummanCheck.html,hummanCheck.css"
           target: "/home/u627514535/domains/mohamedabdelrahman.com/public_html"
           rm: false
 
