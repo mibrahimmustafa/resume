@@ -848,7 +848,7 @@ function enhanceUserExperience() {
                     entry.target.classList.add('section-visible');
                     
                     // Add staggered animations to child elements
-                    const children = entry.target.querySelectorAll('.timeline-item, .skill-item, .certification-card, .employer-card, .achievement-card');
+                    const children = entry.target.querySelectorAll('.timeline-item, .skill-item, .certification-card, .employer-card, .achievement-card, .project-card');
                     children.forEach((child, index) => {
                         setTimeout(() => {
                             child.classList.add('fade-in');
