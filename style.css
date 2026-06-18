@@ -1198,6 +1198,59 @@ button {
   gap: var(--space-sm);
 }
 
+/* ===== SKILL FILTERS ===== */
+.skill-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.skill-filter-btn {
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 2px solid var(--border-color, rgba(0,0,0,0.12));
+  background: transparent;
+  color: var(--text-primary);
+  font-size: var(--font-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.skill-filter-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.skill-filter-btn.active[data-filter="all"] {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+.skill-filter-btn.active[data-filter="expert"] {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+.skill-filter-btn.active[data-filter="advanced"] {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: #fff;
+}
+
+.skill-filter-btn.active[data-filter="intermediate"] {
+  background: var(--warning-color);
+  border-color: var(--warning-color);
+  color: #fff;
+}
+
+.skill-item.skill-item--hidden {
+  display: none;
+}
+
 /* ===== SKILLS ===== */
 .skills-grid {
   display: grid;

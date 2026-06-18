@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initBackToTop();
     initSmoothScrolling();
     initStatsCounters();
+    initSkillFilters();
 });
 
 /**
@@ -1114,5 +1115,32 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initChatbot);
 } else {
     initChatbot();
+}
+
+/**
+ * Skill Proficiency Filter
+ * Toggles visibility of skill items based on data-level attribute
+ */
+function initSkillFilters() {
+    const filterBtns = document.querySelectorAll('.skill-filter-btn');
+    if (!filterBtns.length) return;
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const allItems = document.querySelectorAll('#skills .skill-item[data-level]');
+            allItems.forEach(item => {
+                if (filter === 'all' || item.dataset.level === filter) {
+                    item.classList.remove('skill-item--hidden');
+                } else {
+                    item.classList.add('skill-item--hidden');
+                }
+            });
+        });
+    });
 }
 
