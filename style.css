@@ -557,6 +557,47 @@ button {
   border-color: var(--accent-color);
 }
 
+/* ===== SKILL PROFICIENCY BADGES ===== */
+.skill-item[data-level] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.skill-item[data-level]::after {
+  content: attr(data-level);
+  font-size: 0.6rem;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1px 6px;
+  border-radius: 50px;
+  line-height: 1.7;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: var(--transition-normal);
+}
+
+.skill-item[data-level="expert"]::after {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.skill-item[data-level="advanced"]::after {
+  background: var(--success-color);
+  color: #fff;
+}
+
+.skill-item[data-level="intermediate"]::after {
+  background: var(--warning-color);
+  color: #fff;
+}
+
+.skill-item[data-level]:hover::after {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
 /* ===== LANGUAGE SKILL ITEMS ===== */
 .skill-item--lang {
   display: flex;
