@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
     initResumeTabs();
     initThemeToggle();
-    initCustomCaptcha();
+    initCustomchallenge();
     setupDownloadButton();
     setupFormValidation();
     enhanceUserExperience();
@@ -92,10 +92,10 @@ function initThemeToggle() {
 }
 
 /**
- * Custom CAPTCHA System
- * Text-based CAPTCHA with alphanumeric characters on image
+ * Custom challenge System
+ * Text-based challenge with alphanumeric characters on image
  */
-class CaptchaSystem {
+class challengeSystem {
     constructor(config) {
         this.displayId = config.displayId;
         this.inputId = config.inputId;
@@ -201,9 +201,9 @@ class CaptchaSystem {
         const imageData = canvas.toDataURL();
         
         display.innerHTML = `
-            <div class="text-captcha">
-                <img src="${imageData}" alt="CAPTCHA" class="captcha-image">
-                <div class="captcha-instruction">Enter the characters you see above</div>
+            <div class="text-challenge">
+                <img src="${imageData}" alt="challenge" class="challenge-image">
+                <div class="challenge-instruction">Enter the characters you see above</div>
             </div>
         `;
     }
@@ -277,31 +277,31 @@ class CaptchaSystem {
     }
 }
 
-let contactCaptcha;
-let cvCaptcha;
+let contactchallenge;
+let cvchallenge;
 
-function initCustomCaptcha() {
-    contactCaptcha = new CaptchaSystem({
-        displayId: 'captchaDisplay',
-        inputId: 'captchaInput',
-        refreshBtnId: 'refreshCaptcha',
-        audioBtnId: 'audioCaptcha',
-        hintId: 'captchaHint',
-        errorId: 'captchaError',
-        timeoutId: 'captchaTimeout'
+function initCustomchallenge() {
+    contactchallenge = new challengeSystem({
+        displayId: 'challengeDisplay',
+        inputId: 'challengeInput',
+        refreshBtnId: 'refreshchallenge',
+        audioBtnId: 'audiochallenge',
+        hintId: 'challengeHint',
+        errorId: 'challengeError',
+        timeoutId: 'challengeTimeout'
     });
-    contactCaptcha.init();
+    contactchallenge.init();
     
-    cvCaptcha = new CaptchaSystem({
-        displayId: 'cvCaptchaDisplay',
-        inputId: 'cvCaptchaInput',
-        refreshBtnId: 'cvRefreshCaptcha',
-        audioBtnId: 'cvAudioCaptcha',
-        hintId: 'cvCaptchaHint',
-        errorId: 'cvCaptchaError',
-        timeoutId: 'cvCaptchaTimeout'
+    cvchallenge = new challengeSystem({
+        displayId: 'cvchallengeDisplay',
+        inputId: 'cvchallengeInput',
+        refreshBtnId: 'cvRefreshchallenge',
+        audioBtnId: 'cvAudiochallenge',
+        hintId: 'cvchallengeHint',
+        errorId: 'cvchallengeError',
+        timeoutId: 'cvchallengeTimeout'
     });
-    cvCaptcha.init();
+    cvchallenge.init();
 }
 
 /**
@@ -582,7 +582,7 @@ function setupFormValidation() {
         const name = document.getElementById("name").value.trim();
         const email = document.getElementById("email").value.trim();
         const message = document.getElementById("message").value.trim();
-        const captcha = document.getElementById("captchaInput").value.trim();
+        const challenge = document.getElementById("challengeInput").value.trim();
         
         // Form validation
         if (!name || !email || !message) {
@@ -598,23 +598,23 @@ function setupFormValidation() {
             return;
         }
         
-        // CAPTCHA validation
-        if (contactCaptcha.isExpired()) {
-            showStatus("CAPTCHA expired. Please refresh and try again.", "error");
-            contactCaptcha.generateChallenge();
+        // challenge validation
+        if (contactchallenge.isExpired()) {
+            showStatus("challenge expired. Please refresh and try again.", "error");
+            contactchallenge.generateChallenge();
             return;
         }
         
-        if (!contactCaptcha.validateAnswer(captcha)) {
-            document.getElementById("captchaError").style.display = "block";
-            highlightField("captchaInput");
-            contactCaptcha.generateChallenge();
+        if (!contactchallenge.validateAnswer(challenge)) {
+            document.getElementById("challengeError").style.display = "block";
+            highlightField("challengeInput");
+            contactchallenge.generateChallenge();
             return;
         }
         
         // Clear all errors
-        document.getElementById("captchaError").style.display = "none";
-        document.getElementById("captchaTimeout").style.display = "none";
+        document.getElementById("challengeError").style.display = "none";
+        document.getElementById("challengeTimeout").style.display = "none";
         
         // Disable form during submission
         const submitButton = contactForm.querySelector("button[type='submit']");
@@ -642,7 +642,7 @@ function setupFormValidation() {
             }
             showStatus("Message sent successfully! I'll get back to you soon.", "success");
             contactForm.reset();
-            contactCaptcha.generateChallenge();
+            contactchallenge.generateChallenge();
         })
         .catch(function(error) {
             console.error("Webhook error:", error);
@@ -660,9 +660,9 @@ function setupFormValidation() {
     formInputs.forEach(input => {
         input.addEventListener('input', function() {
             this.classList.remove('input-error');
-            // Clear CAPTCHA errors on input
-            if (this.id === 'captchaInput') {
-                contactCaptcha.clearErrors();
+            // Clear challenge errors on input
+            if (this.id === 'challengeInput') {
+                contactchallenge.clearErrors();
             }
         });
     });
@@ -741,15 +741,15 @@ function setupDownloadButton() {
 
     closeBtn.addEventListener("click", function() {
         modal.classList.remove("active");
-        cvCaptcha.clearErrors();
-        cvCaptcha.generateChallenge();
+        cvchallenge.clearErrors();
+        cvchallenge.generateChallenge();
     });
 
     window.addEventListener("click", function(e) {
         if (e.target == modal) {
             modal.classList.remove("active");
-            cvCaptcha.clearErrors();
-            cvCaptcha.generateChallenge();
+            cvchallenge.clearErrors();
+            cvchallenge.generateChallenge();
         }
     });
 
@@ -759,28 +759,28 @@ function setupDownloadButton() {
         const name = document.getElementById("cvName").value.trim();
         const email = document.getElementById("cvEmail").value.trim();
         const phone = document.getElementById("cvPhone").value.trim();
-        const captcha = document.getElementById("cvCaptchaInput").value.trim();
+        const challenge = document.getElementById("cvchallengeInput").value.trim();
 
-        // CAPTCHA validation
-        if (cvCaptcha.isExpired()) {
-            document.getElementById("cvCaptchaTimeout").style.display = "block";
-            cvCaptcha.generateChallenge();
+        // challenge validation
+        if (cvchallenge.isExpired()) {
+            document.getElementById("cvchallengeTimeout").style.display = "block";
+            cvchallenge.generateChallenge();
             return;
         }
         
-        if (!cvCaptcha.validateAnswer(captcha)) {
-            document.getElementById("cvCaptchaError").style.display = "block";
-            const captchaInput = document.getElementById("cvCaptchaInput");
-            if (captchaInput) {
-                captchaInput.classList.add('input-error');
-                captchaInput.focus();
+        if (!cvchallenge.validateAnswer(challenge)) {
+            document.getElementById("cvchallengeError").style.display = "block";
+            const challengeInput = document.getElementById("cvchallengeInput");
+            if (challengeInput) {
+                challengeInput.classList.add('input-error');
+                challengeInput.focus();
             }
-            cvCaptcha.generateChallenge();
+            cvchallenge.generateChallenge();
             return;
         }
         
-        document.getElementById("cvCaptchaError").style.display = "none";
-        document.getElementById("cvCaptchaTimeout").style.display = "none";
+        document.getElementById("cvchallengeError").style.display = "none";
+        document.getElementById("cvchallengeTimeout").style.display = "none";
 
         const btn = document.getElementById("submitCvDownload");
         const originalText = btn.innerHTML;
@@ -813,8 +813,8 @@ function setupDownloadButton() {
             setTimeout(() => {
                 modal.classList.remove("active");
                 downloadForm.reset();
-                cvCaptcha.clearErrors();
-                cvCaptcha.generateChallenge();
+                cvchallenge.clearErrors();
+                cvchallenge.generateChallenge();
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             }, 2000);
@@ -833,8 +833,8 @@ function setupDownloadButton() {
             setTimeout(() => {
                 modal.classList.remove("active");
                 downloadForm.reset();
-                cvCaptcha.clearErrors();
-                cvCaptcha.generateChallenge();
+                cvchallenge.clearErrors();
+                cvchallenge.generateChallenge();
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             }, 3000);

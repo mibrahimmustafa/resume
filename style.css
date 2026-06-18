@@ -1422,12 +1422,12 @@ button {
   transform: translateY(-2px);
 }
 
-/* ===== CUSTOM CAPTCHA STYLES ===== */
-.captcha-group {
+/* ===== CUSTOM challenge STYLES ===== */
+.challenge-group {
   position: relative;
 }
 
-.captcha-container {
+.challenge-container {
   background: rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-md);
   padding: var(--space-md);
@@ -1435,7 +1435,7 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.captcha-display {
+.challenge-display {
   background: var(--white);
   border-radius: var(--radius-sm);
   padding: var(--space-lg);
@@ -1448,14 +1448,14 @@ button {
   box-shadow: var(--shadow-sm);
 }
 
-.captcha-controls {
+.challenge-controls {
   display: flex;
   gap: var(--space-sm);
   justify-content: center;
 }
 
-.captcha-refresh,
-.captcha-audio {
+.challenge-refresh,
+.challenge-audio {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: var(--white);
@@ -1466,13 +1466,13 @@ button {
   font-size: var(--font-sm);
 }
 
-.captcha-refresh:hover,
-.captcha-audio:hover {
+.challenge-refresh:hover,
+.challenge-audio:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
 
-.captcha-hint {
+.challenge-hint {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
@@ -1481,19 +1481,19 @@ button {
   margin-top: var(--space-xs);
 }
 
-.captcha-hint i {
+.challenge-hint i {
   color: var(--accent-color);
 }
 
-/* Text CAPTCHA Styles */
-.text-captcha {
+/* Text challenge Styles */
+.text-challenge {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-sm);
 }
 
-.captcha-image {
+.challenge-image {
   border: 2px solid var(--medium-gray);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
@@ -1502,7 +1502,7 @@ button {
   height: auto;
 }
 
-.captcha-instruction {
+.challenge-instruction {
   font-size: var(--font-sm);
   color: var(--text-secondary);
   text-align: center;
@@ -1528,18 +1528,18 @@ button {
   background-color: rgba(255, 107, 107, 0.1) !important;
 }
 
-/* Dark Theme Adjustments for CAPTCHA */
-[data-theme="dark"] .captcha-display {
+/* Dark Theme Adjustments for challenge */
+[data-theme="dark"] .challenge-display {
   background: var(--light-gray);
   color: var(--text-primary);
 }
 
-[data-theme="dark"] .captcha-image {
+[data-theme="dark"] .challenge-image {
   border-color: var(--dark-gray);
   background: var(--white);
 }
 
-[data-theme="dark"] .captcha-instruction {
+[data-theme="dark"] .challenge-instruction {
   color: var(--text-secondary);
 }
 

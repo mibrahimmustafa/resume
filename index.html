@@ -105,7 +105,7 @@
           ]
         }
         </script>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css?v=2.2">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -803,40 +803,40 @@
                         <form id="contactForm" class="contact-form">
                             <div class="form-group">
                                 <label for="name">Name</label>
-                                <input type="text" id="name" name="name" placeholder="Your name" required>
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Your name" required>
                             </div>
                             
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" id="email" name="email" placeholder="Your email address" required>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Your email address" required>
                             </div>
                             
                             <div class="form-group">
                                 <label for="message">Message</label>
-                                <textarea id="message" name="message" rows="4" placeholder="Your message" required></textarea>
+                                <textarea id="message" name="message" class="form-control" rows="4" placeholder="Your message" required></textarea>
                             </div>
                             
-                            <!-- Custom CAPTCHA Container -->
-                            <div class="form-group captcha-group">
-                                <label id="captchaLabel" for="captchaInput">Security Verification</label>
-                                <div id="captchaContainer" class="captcha-container">
-                                    <div id="captchaDisplay" class="captcha-display"></div>
-                                    <div class="captcha-controls">
-                                        <button type="button" id="refreshCaptcha" class="captcha-refresh" title="Refresh CAPTCHA">
+                            <!-- Custom challenge Container -->
+                            <div class="form-group challenge-group">
+                                <label id="challengeLabel" for="challengeInput">Security Verification</label>
+                                <div id="challengeContainer" class="challenge-container">
+                                    <div id="challengeDisplay" class="challenge-display"></div>
+                                    <div class="challenge-controls">
+                                        <button type="button" id="refreshchallenge" class="challenge-refresh" title="Refresh challenge">
                                             <i class="fas fa-sync-alt"></i>
                                         </button>
-                                        <button type="button" id="audioCaptcha" class="captcha-audio" title="Audio CAPTCHA">
+                                        <button type="button" id="audiochallenge" class="challenge-audio" title="Audio challenge">
                                             <i class="fas fa-volume-up"></i>
                                         </button>
                                     </div>
                                 </div>
-                                <input type="text" id="captchaInput" name="captcha" placeholder="Enter the answer" required>
-                                <div class="captcha-hint">
+                                <input type="text" id="challengeInput" name="challenge" class="form-control" placeholder="Enter the answer" required>
+                                <div class="challenge-hint">
                                     <i class="fas fa-info-circle"></i>
-                                    <span id="captchaHint">Complete the security challenge above</span>
+                                    <span id="challengeHint">Complete the security challenge above</span>
                                 </div>
-                                <p id="captchaError" class="error-message">Incorrect answer. Please try again.</p>
-                                <p id="captchaTimeout" class="error-message">CAPTCHA expired. Please refresh and try again.</p>
+                                <p id="challengeError" class="error-message">Incorrect answer. Please try again.</p>
+                                <p id="challengeTimeout" class="error-message">challenge expired. Please refresh and try again.</p>
                             </div>
                             
                             <button type="submit" class="btn-primary">
@@ -922,37 +922,37 @@
                 <form id="downloadCvForm" class="contact-form">
                     <div class="form-group">
                         <label for="cvName">Full Name</label>
-                        <input type="text" id="cvName" placeholder="Your full name" required>
+                        <input type="text" id="cvName" class="form-control" placeholder="Your full name" required>
                     </div>
                     <div class="form-group">
                         <label for="cvEmail">Email Address</label>
-                        <input type="email" id="cvEmail" placeholder="Your email address" required>
+                        <input type="email" id="cvEmail" class="form-control" placeholder="Your email address" required>
                     </div>
                     <div class="form-group">
                         <label for="cvPhone">Phone Number</label>
-                        <input type="tel" id="cvPhone" placeholder="Your phone number" required>
+                        <input type="tel" id="cvPhone" class="form-control" placeholder="Your phone number" required>
                     </div>
-                    <!-- Custom CAPTCHA Container -->
-                    <div class="form-group captcha-group">
-                        <label id="cvCaptchaLabel" for="cvCaptchaInput">Security Verification</label>
-                        <div id="cvCaptchaContainer" class="captcha-container">
-                            <div id="cvCaptchaDisplay" class="captcha-display"></div>
-                            <div class="captcha-controls">
-                                <button type="button" id="cvRefreshCaptcha" class="captcha-refresh" title="Refresh CAPTCHA">
+                    <!-- Custom challenge Container -->
+                    <div class="form-group challenge-group">
+                        <label id="cvchallengeLabel" for="cvchallengeInput">Security Verification</label>
+                        <div id="cvchallengeContainer" class="challenge-container">
+                            <div id="cvchallengeDisplay" class="challenge-display"></div>
+                            <div class="challenge-controls">
+                                <button type="button" id="cvRefreshchallenge" class="challenge-refresh" title="Refresh challenge">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
-                                <button type="button" id="cvAudioCaptcha" class="captcha-audio" title="Audio CAPTCHA">
+                                <button type="button" id="cvAudiochallenge" class="challenge-audio" title="Audio challenge">
                                     <i class="fas fa-volume-up"></i>
                                 </button>
                             </div>
                         </div>
-                        <input type="text" id="cvCaptchaInput" name="cvCaptcha" placeholder="Enter the answer" required>
-                        <div class="captcha-hint">
+                        <input type="text" id="cvchallengeInput" name="cvchallenge" class="form-control" placeholder="Enter the answer" required>
+                        <div class="challenge-hint">
                             <i class="fas fa-info-circle"></i>
-                            <span id="cvCaptchaHint">Complete the security challenge above</span>
+                            <span id="cvchallengeHint">Complete the security challenge above</span>
                         </div>
-                        <p id="cvCaptchaError" class="error-message">Incorrect answer. Please try again.</p>
-                        <p id="cvCaptchaTimeout" class="error-message">CAPTCHA expired. Please refresh and try again.</p>
+                        <p id="cvchallengeError" class="error-message">Incorrect answer. Please try again.</p>
+                        <p id="cvchallengeTimeout" class="error-message">challenge expired. Please refresh and try again.</p>
                     </div>
                     <button type="submit" class="btn-primary" id="submitCvDownload" style="width: 100%;">
                         <i class="fas fa-download"></i> Get CV
@@ -962,6 +962,6 @@
             </div>
         </div>
 
-        <script src="script.js"></script>
+        <script src="script.js?v=2.2"></script>
     </body>
 </html>
