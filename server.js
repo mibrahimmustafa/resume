@@ -34,11 +34,11 @@ function setSecurityHeaders(res) {
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com www.clarity.ms c.bing.com",
+      "script-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com www.clarity.ms scripts.clarity.ms c.bing.com",
       "style-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com fonts.googleapis.com",
       "font-src 'self' cdnjs.cloudflare.com fonts.gstatic.com",
-      "img-src 'self' data: www.clarity.ms c.bing.com",
-      "connect-src 'self' n8n-m8jl.srv1557563.hstgr.cloud www.clarity.ms c.bing.com",
+      "img-src 'self' data: www.clarity.ms c.clarity.ms c.bing.com",
+      "connect-src 'self' n8n-m8jl.srv1557563.hstgr.cloud www.clarity.ms c.clarity.ms k.clarity.ms c.bing.com",
       "frame-ancestors 'none'",
     ].join('; ')
   );
