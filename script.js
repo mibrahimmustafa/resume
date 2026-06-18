@@ -18,7 +18,40 @@ document.addEventListener('DOMContentLoaded', function() {
     enhanceUserExperience();
     initBackToTop();
     initSmoothScrolling();
+    initStatsCounters();
 });
+
+/**
+ * Animated Stats Counters
+ * Counts up from 0 to the target value on page load
+ */
+function initStatsCounters() {
+    const counters = document.querySelectorAll('.stat-number');
+    if (!counters.length) return;
+
+    counters.forEach(counter => {
+        const target = parseInt(counter.dataset.target, 10);
+        if (isNaN(target)) return;
+
+        const duration = 1400;
+        const frameRate = 16;
+        const totalFrames = Math.round(duration / frameRate);
+        let frame = 0;
+
+        const timer = setInterval(() => {
+            frame++;
+            const progress = frame / totalFrames;
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(eased * target);
+            counter.textContent = current;
+
+            if (frame >= totalFrames) {
+                counter.textContent = target;
+                clearInterval(timer);
+            }
+        }, frameRate);
+    });
+}
 
 /**
  * Theme Toggle Functionality
@@ -578,6 +611,9 @@ function setupFormValidation() {
             })
         })
         .then(response => {
+            if (!response.ok) {
+                throw new Error('Server returned ' + response.status);
+            }
             showStatus("Message sent successfully! I'll get back to you soon.", "success");
             contactForm.reset();
             CustomCaptcha.generateChallenge();
