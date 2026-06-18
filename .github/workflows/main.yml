@@ -38,3 +38,15 @@ jobs:
           source: ".,!.git,!.github"
           target: "/home/u627514535/domains/mohamedabdelrahman.net/public_html"
           rm: false
+
+
+      - name: Upload files to .tech via SFTP mohamedabdelrahman.tech
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME  }}
+          password: ${{ secrets.FTP_PASSWORD  }}
+          port: ${{ secrets.FTP_PORT }}
+          source: ".,!.git,!.github"
+          target: "/home/u627514535/domains/mohamedabdelrahman.tech/public_html"
+          rm: false

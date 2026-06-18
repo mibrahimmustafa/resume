@@ -932,6 +932,28 @@
                         <label for="cvPhone">Phone Number</label>
                         <input type="tel" id="cvPhone" placeholder="Your phone number" required>
                     </div>
+                    <!-- Custom CAPTCHA Container -->
+                    <div class="form-group captcha-group">
+                        <label id="cvCaptchaLabel" for="cvCaptchaInput">Security Verification</label>
+                        <div id="cvCaptchaContainer" class="captcha-container">
+                            <div id="cvCaptchaDisplay" class="captcha-display"></div>
+                            <div class="captcha-controls">
+                                <button type="button" id="cvRefreshCaptcha" class="captcha-refresh" title="Refresh CAPTCHA">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button type="button" id="cvAudioCaptcha" class="captcha-audio" title="Audio CAPTCHA">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="text" id="cvCaptchaInput" name="cvCaptcha" placeholder="Enter the answer" required>
+                        <div class="captcha-hint">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="cvCaptchaHint">Complete the security challenge above</span>
+                        </div>
+                        <p id="cvCaptchaError" class="error-message">Incorrect answer. Please try again.</p>
+                        <p id="cvCaptchaTimeout" class="error-message">CAPTCHA expired. Please refresh and try again.</p>
+                    </div>
                     <button type="submit" class="btn-primary" id="submitCvDownload" style="width: 100%;">
                         <i class="fas fa-download"></i> Get CV
                     </button>
