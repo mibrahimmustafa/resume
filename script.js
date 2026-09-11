@@ -1232,7 +1232,7 @@ function initSkillFilters() {
  */
 function initGlobalScrollReveal() {
     const targets = document.querySelectorAll(
-        '.section, .card, .stat-item, .exp-entry, .exp-card, .certification-card, .project-card, ' +
+        '.section, .card, .stat-item, .exp-entry, .exp-card, .exp-timeline-card, .certification-card, .project-card, ' +
         '.employer-card, .timeline-item, .achievement-card, .quick-fact, .section-intro, ' +
         '.contact-cta, .contact-cta-card, .skill-category, .service-card, .core-value, .education-item'
     );
@@ -1280,7 +1280,7 @@ function initGlobalScrollReveal() {
 function initInteractiveCards() {
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
         const tiltCards = document.querySelectorAll(
-            '.stat-item, .certification-card, .project-card, .achievement-card, .employer-card, .contact-cta-card'
+            '.stat-item, .certification-card, .project-card, .achievement-card, .employer-card, .contact-cta-card, .exp-timeline-card'
         );
         tiltCards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
