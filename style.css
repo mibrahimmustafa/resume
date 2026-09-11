@@ -193,6 +193,7 @@ button {
   grid-template-columns: 1fr 1.5fr;
   gap: var(--space-xl);
   margin: var(--space-xl) 0;
+  align-items: start;
 }
 
 @media (max-width: 992px) {
@@ -2880,3 +2881,40 @@ body.resume-tabbed-layout {
 .form-group textarea::placeholder {
     color: var(--text-muted);
 }
+
+/* ===== BACK TO HOME BUTTON ===== */
+.back-to-home {
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    color: #fff !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    text-decoration: none;
+    transition: var(--transition-normal);
+    cursor: pointer;
+}
+
+.back-to-home i {
+    font-size: 1.5rem;
+    color: #fff !important;
+}
+
+.back-to-home span {
+    display: none;
+}
+
+.back-to-home:hover {
+    background: var(--primary-dark);
+    transform: scale(1.1);
+    box-shadow: var(--glow-primary);
+    color: #fff !important;
+}
+
