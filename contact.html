@@ -410,7 +410,7 @@
         </div>
 
         <!-- Footer -->
-        <footer class="footer" style="background:var(--white); border-top:1px solid var(--medium-gray); padding:var(--space-xl) 0;">
+        <footer class="footer subpage-footer">
             <div class="container">
                 <div style="display:flex; flex-wrap:wrap; gap:var(--space-xl); justify-content:space-between; align-items:center;">
                     <div>
@@ -487,44 +487,95 @@
     </script>
 
     <!-- Chatbot Widget -->
-    <div id="chatbot-container" class="chatbot-container">
-        <div class="chatbot-header">
-            <div class="chatbot-avatar">
-                <i class="fas fa-robot"></i>
+    <div class="chatbot-widget-wrap" id="chatbotWidget">
+        <div class="chatbot-widget-panel" id="chatbotPanel">
+            <div class="chatbot-widget-header">
+                <div class="chatbot-widget-avatar"><i class="fas fa-robot"></i></div>
+                <div class="chatbot-widget-info">
+                    <h3>AI Assistant</h3>
+                    <p>Ask me anything about Mohamed</p>
+                </div>
+                <button class="chatbot-widget-close" id="chatbotPanelClose" title="Close"><i class="fas fa-times"></i></button>
             </div>
-            <div class="chatbot-info">
-                <h3>Assistant</h3>
-                <p>How can I help you?</p>
+            <div class="chatbot-widget-body" id="chatbotPanelBody">
+                <div class="chatbot-widget-greeting">
+                    <p>👋 Hi! I'm here to answer questions about Mohamed's experience, skills, and availability.</p>
+                </div>
+                <div class="chatbot-widget-quick" id="chatbotQuickActions">
+                    <button class="chatbot-widget-quick-btn" data-msg="What is your experience?">Experience</button>
+                    <button class="chatbot-widget-quick-btn" data-msg="What certifications do you have?">Certifications</button>
+                    <button class="chatbot-widget-quick-btn" data-msg="Are you available for freelance?">Availability</button>
+                    <button class="chatbot-widget-quick-btn" data-msg="How can I contact you?">Contact</button>
+                </div>
+                <div class="chatbot-widget-messages" id="chatbotMessages"></div>
             </div>
-            <button class="chatbot-close" id="chatbotClose" title="Close">
-                <i class="fas fa-times"></i>
-            </button>
+            <div class="chatbot-widget-footer">
+                <input type="text" class="chatbot-widget-input" id="chatbotPanelInput" placeholder="Type a message..." aria-label="Chat message">
+                <button class="chatbot-widget-send" id="chatbotPanelSend" title="Send"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
-        <div class="chatbot-body" id="chatbotBody">
-            <div class="chatbot-greeting">
-                <p>👋 Hi there! I'm here to answer any questions you might have about my experience, skills, or availability. Feel free to ask me anything!</p>
-            </div>
-            <div class="chatbot-quick-actions">
-                <button class="chatbot-quick-btn" data-msg="What is your experience?">Experience</button>
-                <button class="chatbot-quick-btn" data-msg="What certifications do you have?">Certifications</button>
-                <button class="chatbot-quick-btn" data-msg="Are you available for freelance work?">Availability</button>
-                <button class="chatbot-quick-btn" data-msg="How can I contact you?">Contact</button>
-            </div>
-        </div>
-        <div class="chatbot-footer">
-            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Type a message..." aria-label="Chat message">
-            <button class="chatbot-send" id="chatbotSend" title="Send">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
+        <button class="chatbot-widget-btn" id="chatbotToggleBtn" aria-label="Open Chat">
+            <i class="fas fa-comment-dots"></i>
+            <span class="chatbot-badge"></span>
+        </button>
     </div>
-
 
     <!-- Back to Home Button -->
     <a href="index.html" class="back-to-home" title="Back to Home">
         <i class="fas fa-home"></i>
         <span>Home</span>
     </a>
+
+    <script>
+    (function() {
+        var btn = document.getElementById('chatbotToggleBtn');
+        var panel = document.getElementById('chatbotPanel');
+        var closeBtn = document.getElementById('chatbotPanelClose');
+        var input = document.getElementById('chatbotPanelInput');
+        var sendBtn = document.getElementById('chatbotPanelSend');
+        var messages = document.getElementById('chatbotMessages');
+        var quickActions = document.getElementById('chatbotQuickActions');
+        var isOpen = false;
+        function toggleChat() {
+            isOpen = !isOpen;
+            panel.classList.toggle('open', isOpen);
+            btn.querySelector('i').className = isOpen ? 'fas fa-times' : 'fas fa-comment-dots';
+        }
+        btn.addEventListener('click', toggleChat);
+        closeBtn.addEventListener('click', toggleChat);
+        var responses = {
+            experience: 'Mohamed has 17+ years of experience across SCFHS, Huawei Egypt, Vodafone Egypt, and ITSOFT — specializing in System Architecture, Cloud Engineering (AWS/Azure/GCP/OCI), DevOps, CRM, and AI Automation.',
+            certifications: 'Mohamed holds 12+ certifications: AWS Solutions Architect Pro, GCP Cloud DevOps Engineer, Microsoft AZ-400, SC-200, PL-600, PMP, ITIL V4, CEH Cybersecurity Master, IBM Python for Data Science, and more.',
+            availability: 'Mohamed is open to Full-Time, Part-Time, and Freelance opportunities. Based in Riyadh, Saudi Arabia. Reach him at m.ibrahim.mustafa@gmail.com or +966-553346876.',
+            contact: 'Contact Mohamed:\n📧 m.ibrahim.mustafa@gmail.com\n📞 +966-553346876\n💬 WhatsApp: wa.me/966553346876\n🔗 LinkedIn: linkedin.com/in/mohamed-abdelrahman-19044436'
+        };
+        function sendMessage(text) {
+            var userDiv = document.createElement('div');
+            userDiv.className = 'chatbot-widget-msg user';
+            userDiv.textContent = text;
+            messages.appendChild(userDiv);
+            var lower = text.toLowerCase();
+            var reply = 'Thanks! For more details, visit the relevant page or email m.ibrahim.mustafa@gmail.com';
+            if (lower.includes('experience') || lower.includes('work')) reply = responses.experience;
+            else if (lower.includes('certif')) reply = responses.certifications;
+            else if (lower.includes('availab') || lower.includes('freelance') || lower.includes('hire')) reply = responses.availability;
+            else if (lower.includes('contact') || lower.includes('reach') || lower.includes('email') || lower.includes('phone')) reply = responses.contact;
+            setTimeout(function() {
+                var botDiv = document.createElement('div');
+                botDiv.className = 'chatbot-widget-msg bot';
+                botDiv.textContent = reply;
+                messages.appendChild(botDiv);
+                messages.scrollTop = messages.scrollHeight;
+            }, 600);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        quickActions.addEventListener('click', function(e) {
+            if (e.target.classList.contains('chatbot-widget-quick-btn')) sendMessage(e.target.dataset.msg);
+        });
+        sendBtn.addEventListener('click', function() { var t = input.value.trim(); if (t) { sendMessage(t); input.value = ''; } });
+        input.addEventListener('keypress', function(e) { if (e.key === 'Enter') { var t = input.value.trim(); if (t) { sendMessage(t); input.value = ''; } } });
+    })();
+    </script>
 
     </body>
 </html>

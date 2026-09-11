@@ -20,37 +20,63 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
     initStatsCounters();
     initSkillFilters();
+    initGlobalScrollReveal();
+    initInteractiveCards();
 });
 
 /**
  * Animated Stats Counters
- * Counts up from 0 to the target value on page load
+ * Counts up smoothly from 0 to target when scrolled into view
  */
 function initStatsCounters() {
     const counters = document.querySelectorAll('.stat-number');
     if (!counters.length) return;
 
     counters.forEach(counter => {
-        const target = parseInt(counter.dataset.target, 10);
+        let rawTarget = counter.dataset.target;
+        let suffix = counter.dataset.suffix || '';
+        let target = parseInt(rawTarget, 10);
+
+        if (isNaN(target)) {
+            const rawText = counter.textContent.trim();
+            target = parseInt(rawText, 10);
+            if (rawText.includes('+')) suffix = '+';
+            if (rawText.includes('%')) suffix = '%';
+        }
+
         if (isNaN(target)) return;
 
-        const duration = 1400;
-        const frameRate = 16;
-        const totalFrames = Math.round(duration / frameRate);
-        let frame = 0;
+        const animate = () => {
+            const duration = 1500;
+            const frameRate = 16;
+            const totalFrames = Math.round(duration / frameRate);
+            let frame = 0;
 
-        const timer = setInterval(() => {
-            frame++;
-            const progress = frame / totalFrames;
-            const eased = 1 - Math.pow(1 - progress, 3);
-            const current = Math.round(eased * target);
-            counter.textContent = current;
+            const timer = setInterval(() => {
+                frame++;
+                const progress = frame / totalFrames;
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(eased * target);
+                counter.textContent = current + suffix;
 
-            if (frame >= totalFrames) {
-                counter.textContent = target;
-                clearInterval(timer);
-            }
-        }, frameRate);
+                if (frame >= totalFrames) {
+                    counter.textContent = target + suffix;
+                    clearInterval(timer);
+                }
+            }, frameRate);
+        };
+
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries, obs) => {
+                if (entries[0].isIntersecting) {
+                    animate();
+                    obs.unobserve(counter);
+                }
+            }, { threshold: 0.2 });
+            observer.observe(counter);
+        } else {
+            animate();
+        }
     });
 }
 
@@ -1199,4 +1225,79 @@ function initSkillFilters() {
         });
     });
 }
+
+/**
+ * Global Scroll Reveal & Interactive Object Enhancements
+ * Adds smooth cascade animations to all major page objects
+ */
+function initGlobalScrollReveal() {
+    const targets = document.querySelectorAll(
+        '.section, .card, .stat-item, .exp-entry, .exp-card, .certification-card, .project-card, ' +
+        '.employer-card, .timeline-item, .achievement-card, .quick-fact, .section-intro, ' +
+        '.contact-cta, .contact-cta-card, .skill-category, .service-card, .core-value, .education-item'
+    );
+
+    if (!targets.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+        targets.forEach(el => el.classList.add('revealed'));
+        return;
+    }
+
+    const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -30px 0px'
+    });
+
+    targets.forEach(el => {
+        el.classList.add('reveal');
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            el.classList.add('revealed');
+        } else {
+            const parent = el.parentElement;
+            if (parent) {
+                const index = Array.from(parent.children).indexOf(el);
+                if (index >= 0 && index < 8) {
+                    el.style.transitionDelay = `${(index % 4) * 0.08}s`;
+                }
+            }
+            revealObserver.observe(el);
+        }
+    });
+}
+
+/**
+ * Interactive 3D Card Hover Tilt Effect
+ */
+function initInteractiveCards() {
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        const tiltCards = document.querySelectorAll(
+            '.stat-item, .certification-card, .project-card, .achievement-card, .employer-card, .contact-cta-card'
+        );
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+                card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-5px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    }
+}
+
 

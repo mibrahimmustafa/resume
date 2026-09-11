@@ -256,11 +256,11 @@
                                 <div class="profile-container" style="flex-direction:column; text-align:center; align-items:center;">
                                     <img src="pic.webp" alt="Mohamed Abdelrahman" class="profile-pic" width="140" height="140" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%232563eb%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22>MA</text></svg>'">
                                     <div class="profile-info" style="text-align:center;">
-                                            <h3 class="name" style="font-size:var(--font-xl);">Mohamed Abdelrahman</h3>
-                                            <p class="job-title" style="font-size:var(--font-sm); color:rgba(255,255,255,0.8);">Sr. System Architect & Technical Team Leader</p>
-                                            <p style="font-size:var(--font-sm); color:rgba(255,255,255,0.7); margin-top:var(--space-xs);">Riyadh, Saudi Arabia</p>
-                                        </div>
+                                        <h3 class="name" style="font-size:var(--font-xl); color:var(--text-primary); text-shadow:none; font-weight:700; margin-top:var(--space-sm); margin-bottom:4px;">Mohamed Abdelrahman</h3>
+                                        <p class="job-title" style="font-size:var(--font-sm); color:var(--primary-color); font-weight:600; margin-bottom:4px;">Sr. System Architect &amp; Technical Team Leader</p>
+                                        <p style="font-size:var(--font-sm); color:var(--text-secondary); margin-top:0;"><i class="fas fa-map-marker-alt" style="color:var(--primary-color); margin-right:4px;"></i> Riyadh, Saudi Arabia</p>
                                     </div>
+                                </div>
 
                                     <div style="display:flex; flex-wrap:wrap; gap:var(--space-md); justify-content:center; margin-top:var(--space-xl);">
                                         <div class="stat-item" style="text-align:center; padding:var(--space-lg); background:linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%); border-radius:var(--radius-lg); border:1px solid var(--medium-gray); min-width:120px;">
@@ -289,13 +289,14 @@
                                         </div>
                                     </div>
 
-                                    <div class="availability-badges" style="margin-top:var(--space-lg); justify-content:flex-start;">
+                                    <div class="availability-badges" style="margin-top:var(--space-lg); justify-content:center;">
                                         <span class="availability-label"><i class="fas fa-circle"></i> Open to:</span>
                                         <span class="availability-badge"><i class="fas fa-briefcase"></i> Full-Time</span>
                                         <span class="availability-badge"><i class="fas fa-clock"></i> Part-Time</span>
                                         <span class="availability-badge"><i class="fas fa-laptop-code"></i> Freelance</span>
                                     </div>
-                                    </div>
+                                </div>
+                            </div>
 
                         <div class="section" id="quick-facts">
                             <h2 class="section-title"><i class="fas fa-info-circle"></i> Quick Facts</h2>
@@ -415,7 +416,7 @@
                 <div class="section" id="full-skills" style="margin-top:var(--space-xl);">
                     <h2 class="section-title"><i class="fas fa-code"></i> Full Skills Matrix</h2>
                     <div class="section-content">
-                        <p class="section-intro">Click <a href="index.html#skills">Home → Technical Skills</a> to filter by proficiency level.</p>
+                        <p class="section-intro"><i class="fas fa-star" style="color:#f59e0b; font-size:1rem;"></i> Click <a href="index.html#skills" class="highlight-cta">Home → Technical Skills</a> <span class="highlight-text">to filter all skills dynamically by proficiency level (Expert, Advanced, Intermediate).</span></p>
                         <div class="skills-full-grid">
                             <div class="skill-category skill-category-full">
                                 <h3 class="skill-category-title"><i class="fas fa-laptop-code"></i> Programming</h3>
@@ -588,7 +589,7 @@
         </main>
 
         <!-- Footer -->
-        <footer class="footer">
+        <footer class="footer subpage-footer" style="background:var(--white); border-top:1px solid var(--medium-gray); padding:var(--space-xl) 0;">
             <div class="container">
                 <div class="footer-content">
                     <div class="footer-brand">
@@ -669,44 +670,118 @@
 </script>
 
     <!-- Chatbot Widget -->
-    <div id="chatbot-container" class="chatbot-container">
-        <div class="chatbot-header">
-            <div class="chatbot-avatar">
-                <i class="fas fa-robot"></i>
+    <div class="chatbot-widget-wrap" id="chatbotWidget">
+        <div class="chatbot-widget-panel" id="chatbotPanel">
+            <div class="chatbot-widget-header">
+                <div class="chatbot-widget-avatar"><i class="fas fa-robot"></i></div>
+                <div class="chatbot-widget-info">
+                    <h3>AI Assistant</h3>
+                    <p>Ask me anything about Mohamed</p>
+                </div>
+                <button class="chatbot-widget-close" id="chatbotPanelClose" title="Close"><i class="fas fa-times"></i></button>
             </div>
-            <div class="chatbot-info">
-                <h3>Assistant</h3>
-                <p>How can I help you?</p>
+            <div class="chatbot-widget-body" id="chatbotPanelBody">
+                <div class="chatbot-widget-greeting">
+                    <p>👋 Hi! I'm here to answer questions about Mohamed's experience, skills, and availability.</p>
+                </div>
+                <div class="chatbot-widget-quick" id="chatbotQuickActions">
+                    <button class="chatbot-widget-quick-btn" data-msg="What is your experience?">Experience</button>
+                    <button class="chatbot-widget-quick-btn" data-msg="What certifications do you have?">Certifications</button>
+                    <button class="chatbot-widget-quick-btn" data-msg="Are you available for freelance?">Availability</button>
+                    <button class="chatbot-widget-quick-btn" data-msg="How can I contact you?">Contact</button>
+                </div>
+                <div class="chatbot-widget-messages" id="chatbotMessages"></div>
             </div>
-            <button class="chatbot-close" id="chatbotClose" title="Close">
-                <i class="fas fa-times"></i>
-            </button>
+            <div class="chatbot-widget-footer">
+                <input type="text" class="chatbot-widget-input" id="chatbotPanelInput" placeholder="Type a message..." aria-label="Chat message">
+                <button class="chatbot-widget-send" id="chatbotPanelSend" title="Send"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
-        <div class="chatbot-body" id="chatbotBody">
-            <div class="chatbot-greeting">
-                <p>👋 Hi there! I'm here to answer any questions you might have about my experience, skills, or availability. Feel free to ask me anything!</p>
-            </div>
-            <div class="chatbot-quick-actions">
-                <button class="chatbot-quick-btn" data-msg="What is your experience?">Experience</button>
-                <button class="chatbot-quick-btn" data-msg="What certifications do you have?">Certifications</button>
-                <button class="chatbot-quick-btn" data-msg="Are you available for freelance work?">Availability</button>
-                <button class="chatbot-quick-btn" data-msg="How can I contact you?">Contact</button>
-            </div>
-        </div>
-        <div class="chatbot-footer">
-            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Type a message..." aria-label="Chat message">
-            <button class="chatbot-send" id="chatbotSend" title="Send">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
+        <button class="chatbot-widget-btn" id="chatbotToggleBtn" aria-label="Open Chat">
+            <i class="fas fa-comment-dots"></i>
+            <span class="chatbot-badge"></span>
+        </button>
     </div>
-
 
     <!-- Back to Home Button -->
     <a href="index.html" class="back-to-home" title="Back to Home">
         <i class="fas fa-home"></i>
         <span>Home</span>
     </a>
+
+    <script>
+    (function() {
+        var btn = document.getElementById('chatbotToggleBtn');
+        var panel = document.getElementById('chatbotPanel');
+        var closeBtn = document.getElementById('chatbotPanelClose');
+        var input = document.getElementById('chatbotPanelInput');
+        var sendBtn = document.getElementById('chatbotPanelSend');
+        var messages = document.getElementById('chatbotMessages');
+        var quickActions = document.getElementById('chatbotQuickActions');
+
+        var isOpen = false;
+        function toggleChat() {
+            isOpen = !isOpen;
+            if (isOpen) {
+                panel.classList.add('open');
+                btn.querySelector('i').className = 'fas fa-times';
+            } else {
+                panel.classList.remove('open');
+                btn.querySelector('i').className = 'fas fa-comment-dots';
+            }
+        }
+        btn.addEventListener('click', toggleChat);
+        closeBtn.addEventListener('click', toggleChat);
+
+        var responses = {
+            'experience': 'Mohamed has 17+ years of experience across Saudi Commission for Health Specialties, Huawei Egypt, Vodafone Egypt, and ITSOFT. He specializes in System Architecture, Cloud Engineering (AWS/Azure/GCP/OCI), DevOps, CRM, and AI Automation.',
+            'certifications': 'Mohamed holds 12+ certifications including: AWS Solutions Architect Professional, GCP Cloud DevOps Engineer, Microsoft DevOps Expert (AZ-400), SC-200, PL-600, PMP, ITIL V4, CEH Cybersecurity Master, IBM Python for Data Science, and more.',
+            'availability': 'Mohamed is open to Full-Time, Part-Time, and Freelance opportunities. Based in Riyadh, Saudi Arabia. Contact him at m.ibrahim.mustafa@gmail.com or +966-553346876.',
+            'contact': 'You can reach Mohamed at:\n📧 m.ibrahim.mustafa@gmail.com\n📞 +966-553346876\n💬 WhatsApp: +966553346876\n🔗 LinkedIn: linkedin.com/in/mohamed-abdelrahman-19044436'
+        };
+
+        function sendMessage(text) {
+            var userDiv = document.createElement('div');
+            userDiv.className = 'chatbot-widget-msg user';
+            userDiv.textContent = text;
+            messages.appendChild(userDiv);
+
+            var lower = text.toLowerCase();
+            var reply = 'Thank you for your message! For detailed information, please visit the relevant page or contact Mohamed directly at m.ibrahim.mustafa@gmail.com';
+            if (lower.includes('experience') || lower.includes('work')) reply = responses.experience;
+            else if (lower.includes('certif')) reply = responses.certifications;
+            else if (lower.includes('availab') || lower.includes('freelance') || lower.includes('hire')) reply = responses.availability;
+            else if (lower.includes('contact') || lower.includes('reach') || lower.includes('email') || lower.includes('phone')) reply = responses.contact;
+
+            setTimeout(function() {
+                var botDiv = document.createElement('div');
+                botDiv.className = 'chatbot-widget-msg bot';
+                botDiv.textContent = reply;
+                messages.appendChild(botDiv);
+                messages.scrollTop = messages.scrollHeight;
+            }, 600);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        quickActions.addEventListener('click', function(e) {
+            if (e.target.classList.contains('chatbot-widget-quick-btn')) {
+                sendMessage(e.target.dataset.msg);
+            }
+        });
+
+        sendBtn.addEventListener('click', function() {
+            var text = input.value.trim();
+            if (text) { sendMessage(text); input.value = ''; }
+        });
+
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                var text = input.value.trim();
+                if (text) { sendMessage(text); input.value = ''; }
+            }
+        });
+    })();
+    </script>
 
     </body>
 </html>
